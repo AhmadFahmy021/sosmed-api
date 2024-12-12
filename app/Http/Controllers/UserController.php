@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+
 
 class UserController extends Controller
 {
@@ -20,7 +23,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        Log::
+        
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'username' => 'required|string|unique:users|max:255',

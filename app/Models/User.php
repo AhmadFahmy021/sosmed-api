@@ -3,9 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Stories;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -57,6 +58,6 @@ class User extends Authenticatable
 
     public function stories()
     {
-        return $this->hasMany(Story::class, 'user_id');
+        return $this->hasMany(Stories::class, 'user_id');
     }
 }
