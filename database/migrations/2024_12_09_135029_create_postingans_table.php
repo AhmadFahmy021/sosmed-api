@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("foto");
             $table->foreignId("user_id")->constrained();
-            $table->integer("like");
+            $table->integer("like")->default(0);
             $table->text("description");
             // $table->id();
             $table->timestamps();
