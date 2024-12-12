@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StoriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -10,3 +11,5 @@ Route::get('/user', function (Request $request) {
 
 
 Route::apiResource('users', UserController::class);
+
+Route::apiResource('stories', StoriesController::class);
