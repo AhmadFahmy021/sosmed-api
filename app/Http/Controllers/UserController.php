@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class UserController extends Controller
 {
@@ -13,6 +18,7 @@ class UserController extends Controller
     public function index()
     {
         return response()->json(User::with('postingans', 'stories')->get(), 200);
+        // return response()->json(User::all(), 200);
     }
 
     /**
@@ -20,7 +26,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        Log::
+
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'username' => 'required|string|unique:users|max:255',
@@ -31,13 +37,16 @@ class UserController extends Controller
             'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        if ($request->hasFile('foto_profile')) {
-            $validated['foto_profile'] = $request->file('foto_profile')->store('profile_pictures', 'public');
-        }
-
+        // if ($request->hasFile('foto_profile')) {
+        //     $validated['foto_profile'] = $request->file('foto_profile')->store('profile_pictures', 'public');
+        // }
+        $filePath = $request->file('foto_profile')->store('profile_pictures', 'public');
+        $validated['foto_profile'] = $filePath;
         $validated['password'] = Hash::make($validated['password']);
 
         $user = User::create($validated);
+
+        Log::error($user);
 
         return response()->json($user, 201);
     }
@@ -77,9 +86,7 @@ class UserController extends Controller
             'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Update image if provided
         if ($request->hasFile('foto_profile')) {
-            // Delete old image if exists
             if ($user->foto_profile && Storage::disk('public')->exists($user->foto_profile)) {
                 Storage::disk('public')->delete($user->foto_profile);
             }
@@ -107,7 +114,7 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        // Delete image if exists
+
         if ($user->foto_profile && Storage::disk('public')->exists($user->foto_profile)) {
             Storage::disk('public')->delete($user->foto_profile);
         }
