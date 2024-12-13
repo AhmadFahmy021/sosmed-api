@@ -13,3 +13,4 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('users', UserController::class);
 
 Route::apiResource('stories', StoriesController::class);
+

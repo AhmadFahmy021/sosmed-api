@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Stories;
 use Illuminate\Http\Request;
 
@@ -13,14 +14,13 @@ class StoriesController extends Controller
     public function index()
     {
         $stories = Stories::latest()->get();
-        return view('stories.index', compact('stories')); // Assuming a view named 'stories.index'
+        return response()->json($stories); // Berikan respon JSON
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        Log::info('Request received', $request->all());
+
         $request->validate([
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'caption' => 'required|string|max:255',
@@ -28,25 +28,14 @@ class StoriesController extends Controller
 
         $story = new Stories;
         $story->foto = $request->file('foto')->store('public/stories');
-        $story->user_id = $request->user()->id;
-        //$story->user_id = auth()->user()->id; // Assuming authenticated user
+        $story->user_id = $request->user()->id; // Pastikan user autentikasi valid
         $story->caption = $request->caption;
         $story->save();
 
-        return redirect()->route('stories.index')->with('success', 'Story created successfully.');
+        return response()->json(['message' => 'Story created successfully.'], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Stories $story)
-    {
-        return view('stories.show', compact('story')); // Assuming a view named 'stories.show'
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Stories $story)
     {
         $request->validate([
@@ -61,15 +50,13 @@ class StoriesController extends Controller
         $story->caption = $request->caption;
         $story->save();
 
-        return redirect()->route('stories.index')->with('success', 'Story updated successfully.');
+        return response()->json(['message' => 'Story updated successfully.', 'data' => $story]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Stories $story)
     {
         $story->delete();
-        return redirect()->route('stories.index')->with('success', 'Story deleted successfully.');
+        return response()->json(['message' => 'Story deleted successfully.']);
     }
+
 }
