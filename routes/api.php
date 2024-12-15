@@ -22,4 +22,6 @@ Route::apiResource('stories', StoriesController::class);
 
 
 
+
 Route::get('postingan/like/{postingan}', [PostinganController::class, "liked"]);
+Route::get('postingan/unlike/{postingan}', [PostinganController::class, "unliked"]);
