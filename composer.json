@@ -25,8 +25,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "app\\Http\\Controllers\\": "app/Http/Controllers/"
-
+            "app\\Http\\Controllers": "app/Http/Controllers"
         }
     },
     "autoload-dev": {
