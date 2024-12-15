@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
     public function index()
     {
         // return response()->json(User::with('postingans', 'stories')->get(), 200);
@@ -22,7 +26,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        Log::
+
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'username' => 'required|string|unique:users|max:255',
@@ -129,3 +133,5 @@ Log::info('Existing user data: ' . json_encode($user->toArray()));
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
 }
+
+
