@@ -17,10 +17,9 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->text('bio');
-            $table->string('nomer_hp');
-            $table->string('foto_profile');
-            $table->rememberToken();
+            $table->text('bio')->nullable();
+            $table->string('no_hp');
+            $table->string('foto_profile')->nullable();
             $table->timestamps();
         });
 

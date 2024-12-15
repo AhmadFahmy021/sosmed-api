@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function postingans()
     {
-        return $this->hasMany(Postingan::class, 'id_user');
+        return $this->hasMany(Postingan::class, 'user_id');
     }
 
     public function stories()

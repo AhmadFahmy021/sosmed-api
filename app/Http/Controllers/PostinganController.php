@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostinganResource;
+use App\Http\Resources\UserResource;
 use App\Models\Postingan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +16,7 @@ class PostinganController extends Controller
      */
     public function index()
     {
-        $postingan = Postingan::all();
+        $postingan = Postingan::with('user')->get();
         // $data = ["message" => 200, "data" => $postingan];
         return response()->json($postingan, 200);
 
