@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* dictionary */
+/* {
+    "name": {
+        "fahmy": {
+            "kelas": "b",
+            "angkatan": "2022",
+            "kampus": "umm"
+        }
+    }
+} */

@@ -134,4 +134,3 @@ Log::info('Existing user data: ' . json_encode($user->toArray()));
     }
 }
 
-
