@@ -15,10 +15,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
-        return response()->json(User::with('postingans', 'stories')->get(), 200);
-        // return response()->json(User::all(), 200);
+        // return response()->json(User::with('postingans', 'stories')->get(), 200);
+        return response()->json(User::all(), 200);
     }
 
     /**
@@ -37,11 +38,11 @@ class UserController extends Controller
             'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // if ($request->hasFile('foto_profile')) {
-        //     $validated['foto_profile'] = $request->file('foto_profile')->store('profile_pictures', 'public');
-        // }
-        $filePath = $request->file('foto_profile')->store('profile_pictures', 'public');
-        $validated['foto_profile'] = $filePath;
+        if ($request->hasFile('foto_profile')) {
+            $validated['foto_profile'] = $request->file('foto_profile')->store('profile_pictures', 'public');
+        }
+        // $filePath = $request->file('foto_profile')->store('profile_pictures', 'public');
+        // $validated['foto_profile'] = $filePath;
         $validated['password'] = Hash::make($validated['password']);
 
         $user = User::create($validated);
@@ -76,6 +77,11 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
+
+
+        Log::info('Request data: ' . json_encode($request->all()));
+
+
         $validated = $request->validate([
             'nama' => 'sometimes|required|string|max:255',
             'username' => 'sometimes|required|string|unique:users,username,' . $id . '|max:255',
@@ -85,6 +91,10 @@ class UserController extends Controller
             'no_hp' => 'sometimes|required|string|max:15',
             'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+        Log::info('Request data: ' . json_encode($request->all()));
+        Log::info('Validated data: ' . json_encode($validated));
+Log::info('Existing user data: ' . json_encode($user->toArray()));
+
 
         if ($request->hasFile('foto_profile')) {
             if ($user->foto_profile && Storage::disk('public')->exists($user->foto_profile)) {
@@ -98,8 +108,8 @@ class UserController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         }
 
-        $user->update($validated);
-
+        $updated = $user->update($validated);
+        Log::info('Update status: ' . ($updated ? 'Success' : 'Failed'));
         return response()->json($user, 200);
     }
 
