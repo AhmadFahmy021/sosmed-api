@@ -13,28 +13,30 @@ class StoriesController extends Controller
      */
     public function index()
     {
-        $stories = Stories::latest()->get();
-        return response()->json($stories); // Berikan respon JSON
+        $stories = Stories::with('user')->latest()->get(); // Mengambil stories dengan informasi user terkait
+        return response()->json($stories);
     }
 
     public function store(Request $request)
     {
         Log::info('Request received', $request->all());
 
+        // Validasi input
         $request->validate([
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'caption' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id', // Pastikan user_id valid
         ]);
 
+        // Menyimpan story dengan relasi ke user
         $story = new Stories;
         $story->foto = $request->file('foto')->store('public/stories');
-        $story->user_id = $request->user()->id; // Pastikan user autentikasi valid
+        $story->user_id = $request->input('user_id'); // Bisa menggunakan request 'user_id' atau auth()->user()->id
         $story->caption = $request->caption;
         $story->save();
 
         return response()->json(['message' => 'Story created successfully.'], 201);
     }
-
 
     public function update(Request $request, Stories $story)
     {
@@ -58,5 +60,4 @@ class StoriesController extends Controller
         $story->delete();
         return response()->json(['message' => 'Story deleted successfully.']);
     }
-
 }
